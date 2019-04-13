@@ -1,19 +1,5 @@
 import * as path from "path";
-import {
-    commands,
-    Extension,
-    ExtensionContext,
-    extensions,
-    OutputChannel,
-    Position,
-    Range,
-    Selection,
-    TextEditorRevealType,
-    Uri,
-    ViewColumn,
-    window,
-    workspace,
-} from "vscode";
+import { commands, ExtensionContext, extensions, OutputChannel, Position, Range, Selection, TextEditorRevealType, Uri, ViewColumn, window, workspace } from "vscode";
 import { DocumentContentProvider, isMarkdownFile } from "./provider";
 import { MarkdocsServer } from "./server";
 import * as util from "./util/common";
@@ -37,7 +23,7 @@ export async function activate(context: ExtensionContext) {
     const provider = new DocumentContentProvider(context);
     await server.ensureRuntimeDependencies(extension, channel, logger);
 
-    await server.startMarkdocsServerAsync();
+    await server.startMarkdocsServerAsync(logger);
 
     const registration = workspace.registerTextDocumentContentProvider(DocumentContentProvider.scheme, provider);
 
