@@ -22,7 +22,7 @@ import { Logger } from "./util/logger";
 
 let channel: OutputChannel = null;
 let server: MarkdocsServer = null;
-let panelMap: Map<string, WebviewPanel> = new Map();
+const panelMap: Map<string, WebviewPanel> = new Map();
 
 export async function activate(context: ExtensionContext) {
 
@@ -39,7 +39,7 @@ export async function activate(context: ExtensionContext) {
     const provider = new DocumentContentProvider(context);
     await server.ensureRuntimeDependencies(extension, channel, logger);
 
-    await server.startMarkdocsServerAsync();
+    await server.startMarkdocsServerAsync(logger);
 
     const registration = workspace.registerTextDocumentContentProvider(DocumentContentProvider.scheme, provider);
 
@@ -82,9 +82,9 @@ export async function activate(context: ExtensionContext) {
             const markdownFile = getPreviewUri(event.textEditor.document.uri);
 
             this.editor.webview.postMessage({
-                type: 'onDidChangeTextEditorSelection',
+                type: "onDidChangeTextEditorSelection",
                 line: event.selections[0].active.line,
-                source: markdownFile
+                source: markdownFile,
             });
         }
     }));
@@ -125,9 +125,9 @@ async function preview(uri: Uri, viewColumn: number, provider: DocumentContentPr
             enableCommandUris: true,
             enableScripts: true,
             localResourceRoots: [
-                Uri.file(path.join(context.extensionPath, 'media'))
-            ]
-        }
+                Uri.file(path.join(context.extensionPath, "media")),
+            ],
+        },
     );
 
     panel.webview.html = await provider.provideTextDocumentContent(previewUri);

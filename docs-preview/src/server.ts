@@ -1,12 +1,10 @@
 import * as childProcess from "child_process";
 import * as fs from "fs";
-import * as path from "path";
 import {
     Extension,
     ExtensionContext,
     OutputChannel,
     window,
-    workspace,
 } from "vscode";
 import { HttpClient } from "./httpClient";
 import * as util from "./util/common";
@@ -15,7 +13,6 @@ import { Logger } from "./util/logger";
 
 export class MarkdocsServer {
     private spawnProcess: childProcess.ChildProcess;
-    private started: boolean = false;
     private context: ExtensionContext;
 
     constructor(context: ExtensionContext) {
@@ -34,7 +31,7 @@ export class MarkdocsServer {
             });
     }
 
-    public async startMarkdocsServerAsync(): Promise<void> {
+    public async startMarkdocsServerAsync(logger: Logger): Promise<void> {
         const hasStarted = await this.hasAlreadyStartAsync();
         if (hasStarted) {
             return;
@@ -62,8 +59,7 @@ export class MarkdocsServer {
             return;
         }
 
-        this.spawnProcess.stdout.on("data", (data) => {
-            this.started = false;
+        this.spawnProcess.stdout.on("data", () => {
         });
 
         this.spawnProcess.stderr.on("data", (data) => {
