@@ -40,6 +40,7 @@ export class MarkdocsServer {
         const serverPath = this.getServerPath();
         if (!serverPath) {
             window.showErrorMessage(`[DocsPreview Error]: DocsPreview service can't be found.`);
+            logger.appendLine(`[DocsPreview Error]: DocsPreview service can't be found.`);
             return;
         }
 
@@ -51,19 +52,23 @@ export class MarkdocsServer {
             }
         } catch (err) {
             window.showErrorMessage(`[DocsPreview Error]: ${err}`);
+            logger.appendLine(`[DocsPreview Error]: ${err}`);
             return;
         }
 
         if (!this.spawnProcess.pid) {
             window.showErrorMessage(`[DocsPreview Error] Error occurs while spawning markdocs local server.`);
+            logger.appendLine(`[DocsPreview Error] Error occurs while spawning markdocs local server.`);
             return;
         }
 
         this.spawnProcess.stdout.on("data", () => {
+            logger.appendLine(`Preview started successfully.`);
         });
 
         this.spawnProcess.stderr.on("data", (data) => {
             window.showErrorMessage(`[DocsPreview Error]: ${data.toString()}`);
+            logger.appendLine(`[DocsPreview Error]: ${data.toString()}`);
         });
 
         await this.ensureMarkdocsServerWorkAsync();
