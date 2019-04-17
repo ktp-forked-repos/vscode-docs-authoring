@@ -7,7 +7,7 @@ export default class PreviewConfigManager {
     public loadAndCacheConfiguration(
         resource: vscode.Uri,
     ) {
-        const config = MarkdownPreviewConfig.getConfigForResource(resource);
+        const config = MarkdownPreviewConfig.getForResource(resource);
         this.previewConfigurationsForWorkspaces.set(this.getKey(resource), config);
         return config;
     }
@@ -17,7 +17,7 @@ export default class PreviewConfigManager {
     ): boolean {
         const key = this.getKey(resource);
         const currentConfig = this.previewConfigurationsForWorkspaces.get(key);
-        const newConfig = MarkdownPreviewConfig.getConfigForResource(resource);
+        const newConfig = MarkdownPreviewConfig.getForResource(resource);
         return (!currentConfig || !currentConfig.isEqualTo(newConfig));
     }
 

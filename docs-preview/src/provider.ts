@@ -182,7 +182,7 @@ export class DocumentContentProvider implements TextDocumentContentProvider {
 
     private fixLinks(document: string, resource: Uri): string {
         return document.replace(
-            new RegExp("((?:src|href)=[\"\"])([^#]*?)([\"\"])", "gmi"), (subString: string, p1: string, p2: string, p3: string): string => {
+            new RegExp("((?:src|href)=[\'\"])(?!(?:http:|https:|ftp:))(.*?)([\'\"])", "gmi"), (subString: string, p1: string, p2: string, p3: string): string => {
                 return [
                     p1,
                     this.fixHref(resource, p2, false),
